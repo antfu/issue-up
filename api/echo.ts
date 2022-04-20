@@ -8,5 +8,6 @@ export default defineEventHandler(async (event) => {
     method: event.req.method,
     body,
   }
+  console.log(data)
   return data
 })
