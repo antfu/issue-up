@@ -5,6 +5,6 @@
     "build": "nitro build"
   },
   "devDependencies": {
-    "nitropack": "latest"
+    "nitropack": "^0.3.4"
   }
 }
