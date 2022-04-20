@@ -1,5 +1,5 @@
 <p align="center">
-<img src="https://user-images.githubusercontent.com/11247099/164195291-4dd1b6df-cc89-4dbb-97a2-274fcccd86ce.png" height="120">
+<img src="https://user-images.githubusercontent.com/11247099/164265540-c32bccf7-7cfd-4af1-bfa6-655f0e1da199.png" height="120">
 </p>
 <h1 align="center">IssueUp</h1>
 
