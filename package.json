@@ -2,9 +2,24 @@
   "private": true,
   "scripts": {
     "dev": "nitro dev",
-    "build": "nitro build"
+    "build": "nitro build",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "@octokit/auth-app": "^3.6.1",
+    "@octokit/rest": "^18.12.0",
+    "@octokit/webhooks-types": "^5.5.1"
   },
   "devDependencies": {
-    "nitropack": "^0.3.4"
+    "@antfu/eslint-config": "^0.20.6",
+    "@types/connect": "^3.4.35",
+    "connect": "^3.7.0",
+    "dotenv": "^16.0.0",
+    "eslint": "^8.13.0",
+    "nitropack": "^0.3.4",
+    "typescript": "^4.6.3"
+  },
+  "eslintConfig": {
+    "extends": "@antfu"
   }
 }

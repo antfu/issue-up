@@ -1,13 +1,16 @@
-export default defineEventHandler(async (event) => {
-  // @ts-expect-error
-  const body = event.req.method === 'POST' ? await useBody(event) : {}
+import type Connect from 'connect'
+import { defineEventHandler, useBody } from 'h3'
+
+export default defineEventHandler<any>(async(event) => {
+  const req = event.req as Connect.IncomingMessage
+  const body = req.method === 'POST' ? await useBody(event) : {}
+
   const data = {
-    // @ts-expect-error
-    url: event.req.url,
-    // @ts-expect-error
-    method: event.req.method,
+    url: req.url,
+    method: req.method,
     body,
   }
+  // eslint-disable-next-line no-console
   console.log(data)
   return data
 })
