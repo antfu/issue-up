@@ -6,9 +6,11 @@ specifiers:
   '@octokit/rest': ^18.12.0
   '@octokit/webhooks-types': ^5.5.1
   '@types/connect': ^3.4.35
+  '@types/js-yaml': ^4.0.5
   connect: ^3.7.0
   dotenv: ^16.0.0
   eslint: ^8.13.0
+  js-yaml: ^4.1.0
   nitropack: ^0.3.4
   typescript: ^4.6.3
 
@@ -20,9 +22,11 @@ dependencies:
 devDependencies:
   '@antfu/eslint-config': 0.20.6_eslint@8.13.0+typescript@4.6.3
   '@types/connect': 3.4.35
+  '@types/js-yaml': 4.0.5
   connect: 3.7.0
   dotenv: 16.0.0
   eslint: 8.13.0
+  js-yaml: 4.1.0
   nitropack: 0.3.4
   typescript: 4.6.3
 
@@ -534,6 +538,10 @@ packages:
 
   /@types/estree/0.0.51:
     resolution: {integrity: sha512-CuPgU6f3eT/XgKKPqKd/gLZV1Xmvf1a2R5POBOGQa6uv82xpls89HU5zKeVoyR8XzHd1RGNOlQlvUe3CFkjWNQ==}
+    dev: true
+
+  /@types/js-yaml/4.0.5:
+    resolution: {integrity: sha512-FhpRzf927MNQdRZP0J5DLIdTXhjLYzeUTmLAu69mnVksLH9CJY3IuSeEgbKUki7GQZm0WqDkGzyxju2EZGD2wA==}
     dev: true
 
   /@types/jsdom/16.2.14:

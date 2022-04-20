@@ -8,4 +8,10 @@ export interface Context {
     owner: string
     repo: string
   }
+  config: Config
+}
+
+export interface Config {
+  tag: string
+  upstream: Record<string, string>
 }

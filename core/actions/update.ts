@@ -1,6 +1,5 @@
 import type { Issue } from '@octokit/webhooks-types'
 import type { Context } from '../types'
-import { reposMap, triggerTag } from '../index'
 import { getExistingComment, info, updateComment } from '../utils'
 import { COMMENT_FORWARD_ISSUE, COMMENT_UPDATE_COMMENT } from '../constants'
 
@@ -13,7 +12,7 @@ export async function updateIssue(ctx: Context, issue: Issue) {
   if (issue.state !== 'open')
     return info('>>> The issue is not open')
 
-  const { octokit } = ctx
+  const { octokit, config: { tag: triggerTag, upstream: upstreamMap } } = ctx
 
   const number = issue.number
   const labels: string[] = (issue.labels || [])
@@ -29,19 +28,19 @@ labels: ${labels.join(', ')}
   if (!labels.includes(triggerTag))
     return info(`>>> Non-target issue (no "${triggerTag}" tag)`)
 
-  const targets = Object.keys(reposMap).filter(i => labels.includes(i))
+  const targets = Object.keys(upstreamMap).filter(i => labels.includes(i))
   if (!targets.length)
-    return info(`>>> No upstream tag found (supports: ${Object.keys(reposMap).join(', ')})`)
+    return info(`>>> No upstream tag found (supports: ${Object.keys(upstreamMap).join(', ')})`)
   if (targets.length !== 1)
     return info(`>>> Multiple upstream tags found (${targets.join(', ')}), failed to determine which one to use`)
 
   const target = targets[0]
-  const repoLink = reposMap[target]
-  const repoIssueLink = `https://github.com/${repoLink}/issues/`
+  const upstreamName = upstreamMap[target]
+  const upstreamIssueLink = `https://github.com/${upstreamName}/issues/`
 
   info(`
 tag:  ${target}
-repo: ${repoLink}
+upstream: ${upstreamName}
 `.trim())
 
   const existing = await getExistingComment(ctx, number)
@@ -50,7 +49,7 @@ repo: ${repoLink}
 
   let forwardIssueNo: number | undefined
 
-  const [owner, repo] = repoLink.split('/')
+  const [owner, repo] = upstreamName.split('/')
   if (!existing) {
     const { data: forwarded } = await octokit.rest.issues.create({
       owner,
@@ -73,22 +72,22 @@ ${issue.body || ''}
     const { data: comment } = await updateComment(ctx, number, `
 ${COMMENT_UPDATE_COMMENT}
 Upstream issue created:
-- ${repoIssueLink}${forwardIssueNo}
+- ${upstreamIssueLink}${forwardIssueNo}
 `.trim(),
     existing)
     info(comment.html_url)
   }
 
   if (existing?.body) {
-    const index = existing.body.indexOf(repoIssueLink)
+    const index = existing.body.indexOf(upstreamIssueLink)
     if (index) {
-      const number = +(existing.body.slice(index + repoIssueLink.length).match(/^\d+/)?.[0] || 0)
+      const number = +(existing.body.slice(index + upstreamIssueLink.length).match(/^\d+/)?.[0] || 0)
       if (number)
         forwardIssueNo = number
     }
   }
 
-  info(`---Forward Issue---\n${repoIssueLink}${forwardIssueNo}\n`)
+  info(`---Forward Issue---\n${upstreamIssueLink}${forwardIssueNo}\n`)
 
   if (forwardIssueNo) {
     const { data: issue } = await octokit.rest.issues.get({

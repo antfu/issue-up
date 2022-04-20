@@ -5,6 +5,7 @@ import type Connect from 'connect'
 import { defineEventHandler, useBody } from 'h3'
 import { runAction } from '../core'
 import type { Context } from '../core'
+import { readConfig } from '../core/config'
 
 function createOctokit(installationId: number | string) {
   return new Octokit({
@@ -32,26 +33,19 @@ export default defineEventHandler<any>(async(event) => {
   // TODO: remove hard corded
   const octokit = createOctokit(body.installation.id)
   const [owner, repo] = body.repository.full_name.split('/')
+  const config = await readConfig(octokit, owner, repo)
+  if (!config)
+    return console.warn('No config found, skipped')
   const context: Context = {
     octokit,
     event: body,
+    config,
     source: {
       owner,
       repo,
     },
   }
-  try {
-    const { data: config } = await octokit.rest.repos.getContent({
-      ...context.source,
-      path: '.github/upissues.yml',
-    })
-    console.log(JSON.stringify({ config }, null, 2))
-  }
-  catch (e) {
-    console.log(e)
-    console.log(`No config ".github/upissues.yml" found for ${context.source.owner}/${context.source.repo}`)
-    return
-  }
+
   await runAction(context)
   const data = {
     url: req.url,
