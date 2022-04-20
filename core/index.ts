@@ -15,6 +15,6 @@ export async function runAction(ctx: Context) {
   if (!config)
     return info('No config found')
 
-  if ('issue' in event)
+  if ('issue' in event && event.action === 'labeled')
     await updateIssue(ctx, event.issue)
 }

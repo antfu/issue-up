@@ -78,7 +78,7 @@ ${issue.body || ''}
       forwardIssueNo = forwarded.number
 
       const { data: comment } = await updateComment(ctx, number, `
-${COMMENT_UPDATE_COMMENT}
+${COMMENT_UPDATE_COMMENT(owner, repo, forwardIssueNo)}\n
 Upstream issue created:
 - ${upstreamIssueLink}${forwardIssueNo}
 `.trim(),
