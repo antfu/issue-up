@@ -10,7 +10,7 @@ export async function readConfig(ctx: Context, required = false) {
   try {
     const { data: file } = await ctx.octokit.rest.repos.getContent({
       ...ctx.source,
-      path: '.github/upissues.yml',
+      path: '.github/issue-up.yml',
     }) as any
     ctx.config = Object.assign(
       {
@@ -25,7 +25,7 @@ export async function readConfig(ctx: Context, required = false) {
   catch (e) {
     if (required) {
       console.error(e)
-      throw new Error('Missing .github/upissues.yml')
+      throw new Error('Missing .github/issue-up.yml')
     }
     return undefined
   }
