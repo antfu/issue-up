@@ -1,3 +1,4 @@
+import YAML from 'js-yaml'
 import { COMMENT_UPDATE_COMMENT } from './constants'
 import type { Context } from './types'
 
@@ -11,6 +12,8 @@ export async function getExistingComment(ctx: Context, number: number) {
     ...ctx.source,
     issue_number: number,
   })
+
+  console.log(YAML.dump({ comments }))
 
   const existing_comment = comments.find(i => i.body?.includes(COMMENT_UPDATE_COMMENT))
 

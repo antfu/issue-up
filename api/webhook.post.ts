@@ -2,8 +2,10 @@ import { createAppAuth } from '@octokit/auth-app'
 import { Octokit } from '@octokit/rest'
 import type { WebhookEvent } from '@octokit/webhooks-types'
 import { defineEventHandler, useBody } from 'h3'
+import YAML from 'js-yaml'
 import { runAction } from '../core'
 import type { Context } from '../core'
+import { info } from '../core/utils'
 
 function createOctokit(installationId: number | string) {
   return new Octokit({
@@ -24,8 +26,8 @@ export default defineEventHandler<any>(async(event) => {
   if (!body || !('installation' in body) || !('repository' in body))
     throw new Error('Bad')
 
-  console.log('------------')
-  console.log(body)
+  info('------------')
+  info(YAML.dump(body))
 
   // TODO: remove hard corded
   const octokit = createOctokit(body.installation!.id)
