@@ -26,6 +26,9 @@ export default defineEventHandler<any>(async(event) => {
   if (!body || !('installation' in body) || !('repository' in body))
     throw new Error('Bad')
 
+  console.log('------------')
+  console.log(body)
+
   // TODO: remove hard corded
   const octokit = createOctokit(body.installation.id)
   const [owner, repo] = body.repository.full_name.split('/')
