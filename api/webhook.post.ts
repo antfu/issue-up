@@ -37,12 +37,17 @@ export default defineEventHandler<any>(async(event) => {
       repo,
     },
   }
+  const { data: config } = await octokit.rest.repos.getContent({
+    ...context.source,
+    path: './.github/upissues.yml',
+  })
+  console.log(JSON.stringify({ config }, null, 2))
   await runAction(context)
   const data = {
     url: req.url,
     method: req.method,
   }
   // eslint-disable-next-line no-console
-  console.log(data)
+  console.log(JSON.stringify(data, null, 2))
   return data
 })

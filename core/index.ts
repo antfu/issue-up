@@ -93,7 +93,7 @@ repo: ${repoLink}
       title: issue.title,
       body: `
 ${COMMENT_FORWARD_ISSUE}
-🤖 Forwarded from downstream issue
+Forwarded from downstream issue:
 - ${issue.html_url} by @${issue.user.login}
 
 <h2 align="center"><sub>Original description</sub></h2>
@@ -107,7 +107,7 @@ ${issue.body || ''}
     info('---Updating comment---')
     const { data: comment } = await updateComment(ctx, number, `
 ${COMMENT_UPDATE_COMMENT}
-🤖 Upstream issue created
+Upstream issue created:
 - ${repoIssueLink}${forwardIssueNo}
 `.trim(),
     existing)
