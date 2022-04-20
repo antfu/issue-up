@@ -1,11 +1,12 @@
 import { defineEventHandler, useBody } from 'h3'
 
 export default defineEventHandler(async (event) => {
-  const body = await useBody(event)
+  // @ts-expect-error
+  const body = event.req.method === 'POST' ? await useBody(event) : {}
   const data = {
-    // @ts-ignore
+    // @ts-expect-error
     url: event.req.url,
-    // @ts-ignore
+    // @ts-expect-error
     method: event.req.method,
     body,
   }
