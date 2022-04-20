@@ -5,8 +5,8 @@ import { info } from '../utils'
 export async function updateUpstream(ctx: Context) {
   const { octokit, event } = ctx
   if ('action' in event && event.action === 'closed' && 'issue' in event) {
-    const { issue } = event
-    const match = issue.body?.match(COMMENT_FORWARD_ISSUE_RE)
+    const body = event.issue.body || await octokit.rest.issues.get({ issue_number: event.issue.number, ...ctx.source }).then(i => i.data.body)
+    const match = body?.match(COMMENT_FORWARD_ISSUE_RE)
     if (!match)
       return
     const [, owner, repo, number] = match
