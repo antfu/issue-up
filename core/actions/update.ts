@@ -56,7 +56,7 @@ upstream: ${upstreamName}
       repo,
       title: issue.title,
       body: `
-${COMMENT_FORWARD_ISSUE}
+${COMMENT_FORWARD_ISSUE(ctx.source.owner, ctx.source.repo, issue.number)}
 Forwarded from downstream issue:
 - ${issue.html_url} by @${issue.user.login}
 
