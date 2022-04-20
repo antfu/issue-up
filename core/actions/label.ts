@@ -17,18 +17,19 @@ export async function handleIssueLabled(ctx: Context) {
   if (issue.state === 'closed')
     return
 
-  // deduplicate
-  const key = `${ctx.source.owner}/${ctx.source.repo}/${issue.number}`
-  if (Date.now() - (inProgressMap.get(key) || 0) < SAME_ISSUE_RATE)
-    return info(`>>> Throttled for ${key}`)
-  inProgressMap.set(key, Date.now())
-
+  // check label order
   const labels: string[] = (issue.labels || [])
     .map((i: any) => i && i.name)
     .filter(Boolean)
   const lastLabel = labels[labels.length - 1]
   if (lastLabel !== event.label.name)
     return info('>>> Not the last label, skipping')
+
+  // throttling
+  const key = `${ctx.source.owner}/${ctx.source.repo}/${issue.number}`
+  if (Date.now() - (inProgressMap.get(key) || 0) < SAME_ISSUE_RATE)
+    return info(`>>> Throttled for ${key}`)
+  inProgressMap.set(key, Date.now())
 
   const { tag: triggerTag, upstream: upstreamMap } = await readConfig(ctx, true)
 

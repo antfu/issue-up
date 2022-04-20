@@ -27,7 +27,15 @@ export default defineEventHandler<any>(async(event) => {
     throw new Error('Bad')
 
   info('------------')
-  info(YAML.dump(body))
+  info(YAML.dump({
+    // @ts-expect-error fine
+    action: body.action,
+    // @ts-expect-error fine
+    label: body.label?.url,
+    // @ts-expect-error fine
+    issue: body.url?.url,
+    repo: body.repository?.full_name,
+  }))
 
   const octokit = createOctokit(body.installation!.id)
   const [owner, repo] = body.repository!.full_name.split('/')
