@@ -1,5 +1,6 @@
 import YAML from 'js-yaml'
 import type { Config, Context } from './types'
+import { info } from './utils'
 
 export async function readConfig(ctx: Context, required: true): Promise<Config>
 export async function readConfig(ctx: Context, required?: false): Promise<Config | undefined>
@@ -11,12 +12,14 @@ export async function readConfig(ctx: Context, required = false) {
       ...ctx.source,
       path: '.github/upissues.yml',
     }) as any
-    ctx.config = Object.assign({
-      tag: 'upstream',
-      upstream: {},
-    },
-    YAML.load(Buffer.from(file.content!, 'base64').toString('utf8')),
+    ctx.config = Object.assign(
+      {
+        tag: 'upstream',
+        upstream: {},
+      },
+      YAML.load(Buffer.from(file.content!, 'base64').toString('utf8')),
     )
+    info('Read config', ctx.config)
     return ctx.config
   }
   catch (e) {
