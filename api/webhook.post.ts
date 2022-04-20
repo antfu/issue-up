@@ -29,7 +29,6 @@ export default defineEventHandler<any>(async(event) => {
   info('------------')
   info(YAML.dump(body))
 
-  // TODO: remove hard corded
   const octokit = createOctokit(body.installation!.id)
   const [owner, repo] = body.repository!.full_name.split('/')
   const context: Context = {

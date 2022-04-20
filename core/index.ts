@@ -1,20 +1,13 @@
-import { updateIssue } from './actions/update'
-import { updateUpstream } from './actions/issueClose'
-import { readConfig } from './config'
+/* eslint-disable no-useless-return */
+import { handleIssueLabled } from './actions/label'
+import { handleIssueClosed } from './actions/close'
 import type { Context } from './types'
-import { info } from './utils'
 export * from './types'
 
 export async function runAction(ctx: Context) {
-  const { event } = ctx
-
-  if (await updateUpstream(ctx))
+  if (await handleIssueClosed(ctx))
     return
 
-  const config = await readConfig(ctx)
-  if (!config)
-    return info('No config found')
-
-  if ('issue' in event && event.action === 'labeled')
-    await updateIssue(ctx, event.issue)
+  if (await handleIssueLabled(ctx))
+    return
 }
