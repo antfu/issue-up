@@ -1,7 +1,7 @@
 <p align="center">
 <img src="https://user-images.githubusercontent.com/11247099/164195291-4dd1b6df-cc89-4dbb-97a2-274fcccd86ce.png" height="120">
 </p>
-<h1 align="center">UpIssues</h1>
+<h1 align="center">IssueUp</h1>
 
 <p align="center">
 Mirror issues to the upstream repos
@@ -14,8 +14,8 @@ Mirror issues to the upstream repos
 
 ## Setup
 
-- Install the [UpIssues App](https://github.com/apps/upissues) for your repos / orgs
-- Add `.github/upissues.yml` to the repo you want to enable UpIssues
+- Install the [IssueUp App](https://github.com/apps/upissues) for your repos / orgs
+- Add `.github/issue-up.yml` to the repo you want to enable UpIssues
 
 ```yaml
 upstream:
@@ -25,7 +25,7 @@ upstream:
 
 In the `upstream` field, the key represents the name of tag to trigger the action and the value represents the name of the upstream repo (currently only supports repos on GitHub).
 
-> To avoid spamming the upstream repos, we recommend to setup UpIssues **only when you controls both repos**. And it's recommended to not include that trigger labels in issue templates but only assign them manually.
+> 💡 To avoid spamming the upstream repos, we recommend to setup UpIssues **only when you controls both repos**. And it's recommended to not include that trigger labels in issue templates but only assign them manually.
 
 ## Usage
 
