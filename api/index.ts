@@ -1,4 +1,4 @@
-import { defineEventHandler } from 'h3'
+import { defineEventHandler, useBody } from 'h3'
 
 export default defineEventHandler(async (event) => {
   const body = await useBody(event)
