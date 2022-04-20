@@ -8,7 +8,7 @@ export interface Context {
     owner: string
     repo: string
   }
-  config: Config
+  config?: Config
 }
 
 export interface Config {

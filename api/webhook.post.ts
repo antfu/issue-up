@@ -5,14 +5,13 @@ import type Connect from 'connect'
 import { defineEventHandler, useBody } from 'h3'
 import { runAction } from '../core'
 import type { Context } from '../core'
-import { readConfig } from '../core/config'
 
 function createOctokit(installationId: number | string) {
   return new Octokit({
     authStrategy: createAppAuth,
     auth: {
       appId: process.env.UPISSUES_APP_ID,
-      privateKey: Buffer.from(process.env.UPISSUES_PRIVATE_KEY, 'base64').toString('ascii'),
+      privateKey: Buffer.from(process.env.UPISSUES_PRIVATE_KEY!, 'base64').toString('ascii'),
       clientId: process.env.UPISSUES_CLIENT_ID,
       clientSecret: process.env.UPISSUES_CLIENT_SECRET,
       installationId: +installationId,
@@ -31,21 +30,16 @@ export default defineEventHandler<any>(async(event) => {
   console.log(body)
 
   // TODO: remove hard corded
-  const octokit = createOctokit(body.installation.id)
-  const [owner, repo] = body.repository.full_name.split('/')
-  const config = await readConfig(octokit, owner, repo)
-  if (!config)
-    return console.warn('No config found, skipped')
+  const octokit = createOctokit(body.installation!.id)
+  const [owner, repo] = body.repository!.full_name.split('/')
   const context: Context = {
     octokit,
     event: body,
-    config,
     source: {
       owner,
       repo,
     },
   }
-
   await runAction(context)
   const data = {
     url: req.url,

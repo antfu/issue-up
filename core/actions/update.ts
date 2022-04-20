@@ -2,6 +2,7 @@ import type { Issue } from '@octokit/webhooks-types'
 import type { Context } from '../types'
 import { getExistingComment, info, updateComment } from '../utils'
 import { COMMENT_FORWARD_ISSUE, COMMENT_UPDATE_COMMENT } from '../constants'
+import { readConfig } from '../config'
 
 /**
  * Check issue labels and create forward issue if needed
@@ -12,7 +13,8 @@ export async function updateIssue(ctx: Context, issue: Issue) {
   if (issue.state !== 'open')
     return info('>>> The issue is not open')
 
-  const { octokit, config: { tag: triggerTag, upstream: upstreamMap } } = ctx
+  const { octokit } = ctx
+  const { tag: triggerTag, upstream: upstreamMap } = await readConfig(ctx, true)
 
   const number = issue.number
   const labels: string[] = (issue.labels || [])
