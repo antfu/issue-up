@@ -1,7 +1,7 @@
 lockfileVersion: 5.3
 
 specifiers:
-  nitropack: latest
+  nitropack: ^0.3.4
 
 devDependencies:
   nitropack: 0.3.4
