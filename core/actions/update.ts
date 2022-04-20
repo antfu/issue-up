@@ -68,7 +68,7 @@ upstream: ${upstreamName}
         body: `
 ${COMMENT_FORWARD_ISSUE(ctx.source.owner, ctx.source.repo, issue.number)}
 
-<table><td><img width="10000" height="0" src="/">
+<table><td><img width="760" height="0" src="${issue.html_url}">
 
 &nbsp;&nbsp;&nbsp;Forwarded from downstream issue:
 - ${issue.html_url} by @${issue.user.login}
