@@ -25,6 +25,8 @@ upstream:
 
 In the `upstream` field, the key represents the name of tag to trigger the action and the value represents the name of the upstream repo (currently only supports repos on GitHub).
 
+> To avoid spamming the upstream repos, we recommend to setup UpIssues **only when you controls both repos**. And it's recommended to not include that trigger labels in issue templates but only assign them manually.
+
 ## Usage
 
 With the previous config for example, when you label an issue with `upstream` and `dep-a`:
