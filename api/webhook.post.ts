@@ -37,11 +37,18 @@ export default defineEventHandler<any>(async(event) => {
       repo,
     },
   }
-  const { data: config } = await octokit.rest.repos.getContent({
-    ...context.source,
-    path: './.github/upissues.yml',
-  })
-  console.log(JSON.stringify({ config }, null, 2))
+  try {
+    const { data: config } = await octokit.rest.repos.getContent({
+      ...context.source,
+      path: '.github/upissues.yml',
+    })
+    console.log(JSON.stringify({ config }, null, 2))
+  }
+  catch (e) {
+    console.log(e)
+    console.log(`No config ".github/upissues.yml" found for ${context.source.owner}/${context.source.repo}`)
+    return
+  }
   await runAction(context)
   const data = {
     url: req.url,
