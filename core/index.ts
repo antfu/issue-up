@@ -1,5 +1,5 @@
 import { updateIssue } from './actions/update'
-import { updateUpstream } from './actions/upstreamClose'
+import { updateUpstream } from './actions/issueClose'
 import { readConfig } from './config'
 import type { Context } from './types'
 import { info } from './utils'

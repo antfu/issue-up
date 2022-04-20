@@ -1,6 +1,6 @@
 import type { Issue } from '@octokit/webhooks-types'
 import type { Context } from '../types'
-import { getExistingComment, info, updateComment } from '../utils'
+import { getExistingUpdateComment, info, updateComment } from '../utils'
 import { COMMENT_FORWARD_ISSUE, COMMENT_UPDATE_COMMENT } from '../constants'
 import { readConfig } from '../config'
 
@@ -29,11 +29,8 @@ export async function updateIssue(ctx: Context, issue: Issue) {
       .map((i: any) => i && i.name)
       .filter(Boolean)
 
-    info(`
-=== Checkout Issue #${number} ===
-title: ${issue.title}
-labels: ${labels.join(', ')}
-`.trim())
+    info('-------')
+    info(`Checkout issue: ${issue.html_url} [${labels.join(', ')}]`)
 
     if (!labels.includes(triggerTag))
       return info(`>>> Non-target issue (no "${triggerTag}" tag)`)
@@ -53,11 +50,10 @@ tag:  ${target}
 upstream: ${upstreamName}
 `.trim())
 
-    const existing = await getExistingComment(ctx, number)
-
-    info(`---Existing Comment---\n${existing?.html_url}\n`)
-
     let forwardIssueNo: number | undefined
+    const { comment: existing } = (await getExistingUpdateComment(ctx, number)) || {}
+
+    info(`Existing Comment: ${existing?.html_url}`)
 
     const [owner, repo] = upstreamName.split('/')
     if (!existing) {
@@ -78,17 +74,16 @@ ${COMMENT_FORWARD_ISSUE(ctx.source.owner, ctx.source.repo, issue.number)}
 ${issue.body || ''}
     `,
       })
-      info(`---Issue Created---\n${forwarded.html_url}\n`)
+      info(`Issue Created: ${forwarded.html_url}`)
       forwardIssueNo = forwarded.number
 
-      info('---Updating comment---')
       const { data: comment } = await updateComment(ctx, number, `
 ${COMMENT_UPDATE_COMMENT}
 Upstream issue created:
 - ${upstreamIssueLink}${forwardIssueNo}
 `.trim(),
       existing)
-      info(comment.html_url)
+      info(`Updating comment: ${comment.html_url}`)
     }
 
     if (existing?.body) {
@@ -100,7 +95,7 @@ Upstream issue created:
       }
     }
 
-    info(`---Forward Issue---\n${upstreamIssueLink}${forwardIssueNo}\n`)
+    info(`Forward Issue: ${upstreamIssueLink}${forwardIssueNo}\n`)
 
     if (forwardIssueNo) {
       const { data: issue } = await octokit.rest.issues.get({

@@ -1,5 +1,5 @@
-import YAML from 'js-yaml'
-import { COMMENT_UPDATE_COMMENT } from './constants'
+import type { IssueComment } from '@octokit/webhooks-types'
+import { COMMENT_UPDATE_COMMENT_RE } from './constants'
 import type { Context } from './types'
 
 export function info(...args: any[]) {
@@ -7,20 +7,32 @@ export function info(...args: any[]) {
   console.log(...args)
 }
 
-export async function getExistingComment(ctx: Context, number: number) {
+export async function getExistingUpdateComment(ctx: Context, number: number) {
   const { data: comments } = await ctx.octokit.rest.issues.listComments({
     ...ctx.source,
     issue_number: number,
   })
 
-  console.log(YAML.dump({ comments }))
+  let match: RegExpMatchArray | null | undefined
+  const comment = comments.find((i) => {
+    match = i.body?.match(COMMENT_UPDATE_COMMENT_RE)
+    return match
+  })
 
-  const existing_comment = comments.find(i => i.body?.includes(COMMENT_UPDATE_COMMENT))
+  if (!comment || !match)
+    return undefined
 
-  return existing_comment
+  return {
+    comment,
+    upsteam: {
+      owner: match[1],
+      repo: match[2],
+      issue_number: +match[3],
+    },
+  }
 }
 
-export async function updateComment(ctx: Context, number: number, body: string, existing?: Awaited<ReturnType<typeof getExistingComment>>) {
+export async function updateComment(ctx: Context, number: number, body: string, existing?: IssueComment) {
   if (existing) {
     return await ctx.octokit.rest.issues.updateComment({
       ...ctx.source,

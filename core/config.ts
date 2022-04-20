@@ -23,9 +23,10 @@ export async function readConfig(ctx: Context, required = false) {
     return ctx.config
   }
   catch (e) {
-    console.error(e)
-    if (required)
+    if (required) {
+      console.error(e)
       throw new Error('Missing .github/upissues.yml')
+    }
     return undefined
   }
 }
